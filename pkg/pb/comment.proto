@@ -31,8 +31,8 @@ message Comment {
   uint64  id = 1;
   string  text = 2;
   uint64  parentId = 3;
-  uint64  childId  = 4;
-  bool    censored = 5;
+  bool    censored = 4;
+  repeated  Comment children = 5;
 }
 
 message CommentsByNewsResponse {
