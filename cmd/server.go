@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/RTS-1989/go-comment-svc/pkg/config"
 	"github.com/RTS-1989/go-comment-svc/pkg/db"
+	"github.com/RTS-1989/go-comment-svc/pkg/middleware"
 	"github.com/RTS-1989/go-comment-svc/pkg/pb"
 	"github.com/RTS-1989/go-comment-svc/pkg/services"
 	"google.golang.org/grpc"
@@ -32,7 +33,11 @@ func main() {
 		H: h,
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(
+			middleware.LoggingInterceptor,
+		),
+	)
 
 	pb.RegisterCommentServiceServer(grpcServer, &s)
 
