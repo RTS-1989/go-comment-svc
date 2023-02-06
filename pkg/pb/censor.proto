@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package censor;
+
+option go_package = "./pkg/pb";
+
+service CensorService {
+  rpc CreateComment(CreateCommentRequest) returns (CreateCommentResponse) {}
+}
+
+message CreateCommentRequest {
+  uint64 newsId   = 1;
+  uint64 parentId = 2;
+  uint64 userId   = 3;
+  string text     = 4;
+  bool   censored = 5;
+}
+
+message CreateCommentResponse {
+  int64 status = 1;
+  string error = 2;
+  uint64 id = 3;
+}

@@ -40,6 +40,7 @@ func main() {
 	)
 
 	pb.RegisterCommentServiceServer(grpcServer, &s)
+	pb.RegisterCensorServiceServer(grpcServer, &s)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalln("Failed to serve:", err)
