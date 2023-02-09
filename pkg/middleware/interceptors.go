@@ -5,6 +5,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"log"
+	"os"
 	"time"
 )
 
@@ -40,11 +41,25 @@ func LoggingInterceptor(
 	}
 
 	//logging
-	log.Printf("request - Address:%s\tDuration:%s\trequestId:%s\tError:%v\n",
+	f, err := os.OpenFile("go-comment-svc-request.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+
+	logger := log.New(f, "RequestLogger: ", log.LstdFlags)
+
+	logger.Printf("request - Address:%s\tDuration:%s\trequestId:%s\tError:%v\n",
 		address,
 		time.Since(start),
 		requestId,
 		err)
+
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+			log.Printf("Got error %v\n", err)
+		}
+	}(f)
 
 	return h, err
 }
